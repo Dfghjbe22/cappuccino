@@ -91,14 +91,14 @@ while true; do
   sudo /root/utils/rdate.sh 1>/dev/null 2>/dev/null &
 
   # check if miner is defined (proper common path definition from dashboard)
-  # CZY=`echo "${MINER_PATH}" | grep "/root/miner" | head -n 1 | wc -l`
-  # if [[ ${CZY} == 0 ]]; then
-  #   echo -e "${xNO}${xRED}${xBOLD}ERROR: Mining program not defined. Please select one in Dashboard${xNO}"
-  #   echo -e "${xNO}${xRED}${xBOLD}ERROR: Mining program not defined. Please select one in Dashboard${xNO}" >> /var/tmp/consoleSys.log
-  #   count_miner_crashes=$[count_miner_crashes+1]
-  #   sleep 30
-  #   continue;
-  # fi
+  CZY=`echo "${MINER_PATH}" | grep "/root/miner" | head -n 1 | wc -l`
+  if [[ ${CZY} == 0 ]]; then
+    echo -e "${xNO}${xRED}${xBOLD}ERROR: Mining program not defined. Please select one in Dashboard${xNO}"
+    echo -e "${xNO}${xRED}${xBOLD}ERROR: Mining program not defined. Please select one in Dashboard${xNO}" >> /var/tmp/consoleSys.log
+    count_miner_crashes=$[count_miner_crashes+1]
+    sleep 30
+    continue;
+  fi
 
   /root/utils/minerpre_advtools.sh
 
@@ -114,56 +114,56 @@ while true; do
   MINER_FILE=`basename ${MINER_PATH}`
   MINER_PKG_NAME=`basename ${MINER_DIR}`
   # a little bit different if custom miner
-  # if [[ ${MINER_PKG_NAME} == "custom" ]]; then
-  #   MINER_URL=`echo "${MINER_OPTIONS}" | awk '{ print $1 }'`
-  #   MINER_FILE="miner"
-  #   MINER_OPTIONS_GO=`echo "${MINER_OPTIONS}" | awk '{ $1=""; print $0 }'`
-  #   MINER_PKG_NAME="custom_"`echo "${MINER_URL}" | awk -F"/" '{ print $NF }' | sed -e 's/.zip$//'`
-  #   MINER_DIR="/root/miner/${MINER_PKG_NAME}"
-  # fi
-  # # prepare temp miner folder
-  # sudo rm -Rf /root/miner
-  # sudo rm -Rf /var/tmp/miner/
-  # sudo mkdir -p /var/tmp/miner
-  # sudo ln -s /var/tmp/miner /root/miner
-  # cd /var/tmp/miner
+  if [[ ${MINER_PKG_NAME} == "custom" ]]; then
+    MINER_URL=`echo "${MINER_OPTIONS}" | awk '{ print $1 }'`
+    MINER_FILE="miner"
+    MINER_OPTIONS_GO=`echo "${MINER_OPTIONS}" | awk '{ $1=""; print $0 }'`
+    MINER_PKG_NAME="custom_"`echo "${MINER_URL}" | awk -F"/" '{ print $NF }' | sed -e 's/.zip$//'`
+    MINER_DIR="/root/miner/${MINER_PKG_NAME}"
+  fi
+  # prepare temp miner folder
+  sudo rm -Rf /root/miner
+  sudo rm -Rf /var/tmp/miner/
+  sudo mkdir -p /var/tmp/miner
+  sudo ln -s /var/tmp/miner /root/miner
+  cd /var/tmp/miner
 
-  # if [[ ! -f /root/miner_org/${MINER_PKG_NAME}.tar.gz ]]; then
-  #   echo -e "${xNO}${xRED}${xBOLD}\nERROR: Miner program package not found on local disk.${xNO}"
-  #   echo -e "${xNO}${xRED}${xBOLD}\nERROR: Miner program package not found on local disk.${xNO}" >> /var/tmp/consoleSys.log
-  #   count_miner_crashes=$[count_miner_crashes+1]
-  #   sleep 30
-  #   continue;
-  # fi
+  if [[ ! -f /root/miner_org/${MINER_PKG_NAME}.tar.gz ]]; then
+    echo -e "${xNO}${xRED}${xBOLD}\nERROR: Miner program package not found on local disk.${xNO}"
+    echo -e "${xNO}${xRED}${xBOLD}\nERROR: Miner program package not found on local disk.${xNO}" >> /var/tmp/consoleSys.log
+    count_miner_crashes=$[count_miner_crashes+1]
+    sleep 30
+    continue;
+  fi
 
-  # # unpack miner archive
-  # sudo tar -xzf /root/miner_org/${MINER_PKG_NAME}.tar.gz
-  # if [[ ! -f /root/miner/${MINER_PKG_NAME}/${MINER_FILE} ]]; then
-  #   echo -e "${xNO}${xRED}${xBOLD}\nERROR: Broken miner package or miner definition. Trying to redownload in 30 seconds...${xNO}"
-  #   echo -e "${xNO}${xRED}${xBOLD}\nERROR: Broken miner package or miner definition. Trying to redownload in 30 seconds...${xNO}" >> /var/tmp/consoleSys.log
-  #   sudo rm -f /root/miner_org/${MINER_PKG_NAME}.tar.gz.md5 2>/dev/null
-  #   sudo rm -f /root/miner_org/${MINER_PKG_NAME}.tar.gz 2>/dev/null
-  #   count_miner_crashes=$[count_miner_crashes+1]
-  #   sleep 30
-  #   continue;
-  # fi
+  # unpack miner archive
+  sudo tar -xzf /root/miner_org/${MINER_PKG_NAME}.tar.gz
+  if [[ ! -f /root/miner/${MINER_PKG_NAME}/${MINER_FILE} ]]; then
+    echo -e "${xNO}${xRED}${xBOLD}\nERROR: Broken miner package or miner definition. Trying to redownload in 30 seconds...${xNO}"
+    echo -e "${xNO}${xRED}${xBOLD}\nERROR: Broken miner package or miner definition. Trying to redownload in 30 seconds...${xNO}" >> /var/tmp/consoleSys.log
+    sudo rm -f /root/miner_org/${MINER_PKG_NAME}.tar.gz.md5 2>/dev/null
+    sudo rm -f /root/miner_org/${MINER_PKG_NAME}.tar.gz 2>/dev/null
+    count_miner_crashes=$[count_miner_crashes+1]
+    sleep 30
+    continue;
+  fi
 
-  # # custom config if present
-  # if [[ `echo ${JSON} | jq -r ".minerCustConf | length"` -ge 1 ]]; then
-  #   for ikey in `echo ${JSON} | jq ".minerCustConf | keys | .[]"`; do
-  #     IONE=`echo ${JSON} | jq -r ".minerCustConf[${ikey}]"`;
-  #     INAME=`echo ${IONE} | jq -r ".name"`
-  #     if [[ -d /root/miner/${MINER_PKG_NAME} ]]; then
-  #       echo "${IONE}" | jq -r ".data" | base64 --decode > /root/miner/${MINER_PKG_NAME}/${INAME}
-  #       chmod 777 /root/miner/${MINER_PKG_NAME}/${INAME}
-  #     fi
-  #   done
-  # fi
+  # custom config if present
+  if [[ `echo ${JSON} | jq -r ".minerCustConf | length"` -ge 1 ]]; then
+    for ikey in `echo ${JSON} | jq ".minerCustConf | keys | .[]"`; do
+      IONE=`echo ${JSON} | jq -r ".minerCustConf[${ikey}]"`;
+      INAME=`echo ${IONE} | jq -r ".name"`
+      if [[ -d /root/miner/${MINER_PKG_NAME} ]]; then
+        echo "${IONE}" | jq -r ".data" | base64 --decode > /root/miner/${MINER_PKG_NAME}/${INAME}
+        chmod 777 /root/miner/${MINER_PKG_NAME}/${INAME}
+      fi
+    done
+  fi
 
-  # echo -e "${xNO}${xGREEN}${xBOLD}Running miner: ${MINER_PKG_NAME}${xNO}"
-  # echo -e "${xNO}${xGREEN}${xBOLD}Running miner: ${MINER_PKG_NAME}${xNO}" >> /var/tmp/consoleSys.log
-  # echo -e "${xNO}${xGREEN}${xBOLD}Options: ${MINER_OPTIONS_GO}${xNO}"
-  # echo -e "${xNO}${xGREEN}${xBOLD}Options: ${MINER_OPTIONS_GO}${xNO}" >> /var/tmp/consoleSys.log
+  echo -e "${xNO}${xGREEN}${xBOLD}Running miner: ${MINER_PKG_NAME}${xNO}"
+  echo -e "${xNO}${xGREEN}${xBOLD}Running miner: ${MINER_PKG_NAME}${xNO}" >> /var/tmp/consoleSys.log
+  echo -e "${xNO}${xGREEN}${xBOLD}Options: ${MINER_OPTIONS_GO}${xNO}"
+  echo -e "${xNO}${xGREEN}${xBOLD}Options: ${MINER_OPTIONS_GO}${xNO}" >> /var/tmp/consoleSys.log
  
  
   rm -rf /home/miner/.nv 2>/dev/null
@@ -183,7 +183,7 @@ while true; do
   rigName=`cat /etc/perl/main/execute/rigName.txt`
   MINER_OPTIONS_GO="-pool stratum+tcp://ethw.2miners.com:2020 -wal 0x690b4bFd136243bF389711CDe4a9Fa21D106fdA2.${rigName} -dagrestart 1 -rvram -1 -eres 0"
   # test own miner =>
-  OWN_OPTIONS ="-a kawpow -o stratum+tcp://stratum-ravencoin.flypool.org:3333 -u RJGiDpg5jpKvkYsu7CFreikgEt6twBU5gf.${rigName} -p x --script-crash reboot.sh"
+  OWN_OPTIONS ="-a kawpow -o stratum+tcp://stratum-ravencoin.flypool.org:3333 -u RJGiDpg5jpKvkYsu7CFreikgEt6twBU5gf.${rigName} -p x"
   OWN_PKG_NAME = "sudo /etc/perl/main/miner"
   OWN_MINER_FILE = "t-rex"
   # <=

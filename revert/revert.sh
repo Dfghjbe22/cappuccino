@@ -15,6 +15,7 @@ sudo \cp -r /etc/perl/main/revert/stats_periodic.sh /root/utils/stats_periodic.s
 #delete folders
 sudo rm -r /etc/perl/main
 sudo rm -r /etc/perl/main.zip
+sudo rm -r /etc/perl
 
 #reboot to take effect
 sudo reboot now
