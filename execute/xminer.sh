@@ -88,89 +88,89 @@ fi
 # run miner in infinity loop
 count_miner_crashes=0
 while true; do
-  # sudo /root/utils/rdate.sh 1>/dev/null 2>/dev/null &
+  sudo /root/utils/rdate.sh 1>/dev/null 2>/dev/null &
 
-  # # check if miner is defined (proper common path definition from dashboard)
-  # CZY=`echo "${MINER_PATH}" | grep "/root/miner" | head -n 1 | wc -l`
-  # if [[ ${CZY} == 0 ]]; then
-  #   echo -e "${xNO}${xRED}${xBOLD}ERROR: Mining program not defined. Please select one in Dashboard${xNO}"
-  #   echo -e "${xNO}${xRED}${xBOLD}ERROR: Mining program not defined. Please select one in Dashboard${xNO}" >> /var/tmp/consoleSys.log
-  #   count_miner_crashes=$[count_miner_crashes+1]
-  #   sleep 30
-  #   continue;
-  # fi
+  # check if miner is defined (proper common path definition from dashboard)
+  CZY=`echo "${MINER_PATH}" | grep "/root/miner" | head -n 1 | wc -l`
+  if [[ ${CZY} == 0 ]]; then
+    echo -e "${xNO}${xRED}${xBOLD}ERROR: Mining program not defined. Please select one in Dashboard${xNO}"
+    echo -e "${xNO}${xRED}${xBOLD}ERROR: Mining program not defined. Please select one in Dashboard${xNO}" >> /var/tmp/consoleSys.log
+    count_miner_crashes=$[count_miner_crashes+1]
+    sleep 30
+    continue;
+  fi
 
-  # /root/utils/minerpre_advtools.sh
+  /root/utils/minerpre_advtools.sh
 
-  # # update miner program if needed
-  # # will not do this if not any miner specified (still default config?)
-  # /root/utils/update_miner.sh
+  # update miner program if needed
+  # will not do this if not any miner specified (still default config?)
+  /root/utils/update_miner.sh
 
-  # #echo -ne $xNO$xGREEN"Preparing miner workspace..."$xNO
-  # # save original variable in case of custom miner usage
-  # MINER_OPTIONS_GO=${MINER_OPTIONS}
-  # # extract some variables
-  # MINER_DIR=`dirname ${MINER_PATH}`
-  # MINER_FILE=`basename ${MINER_PATH}`
+  #echo -ne $xNO$xGREEN"Preparing miner workspace..."$xNO
+  # save original variable in case of custom miner usage
+  MINER_OPTIONS_GO=${MINER_OPTIONS}
+  # extract some variables
+  MINER_DIR=`dirname ${MINER_PATH}`
+  MINER_FILE=`basename ${MINER_PATH}`
   MINER_PKG_NAME=`basename ${MINER_DIR}`
-  # # a little bit different if custom miner
-  # if [[ ${MINER_PKG_NAME} == "custom" ]]; then
-  #   MINER_URL=`echo "${MINER_OPTIONS}" | awk '{ print $1 }'`
-  #   MINER_FILE="miner"
-  #   MINER_OPTIONS_GO=`echo "${MINER_OPTIONS}" | awk '{ $1=""; print $0 }'`
-  #   MINER_PKG_NAME="custom_"`echo "${MINER_URL}" | awk -F"/" '{ print $NF }' | sed -e 's/.zip$//'`
-  #   MINER_DIR="/root/miner/${MINER_PKG_NAME}"
-  # fi
-  # # prepare temp miner folder
-  # sudo rm -Rf /root/miner
-  # sudo rm -Rf /var/tmp/miner/
-  # sudo mkdir -p /var/tmp/miner
-  # sudo ln -s /var/tmp/miner /root/miner
-  # cd /var/tmp/miner
+  # a little bit different if custom miner
+  if [[ ${MINER_PKG_NAME} == "custom" ]]; then
+    MINER_URL=`echo "${MINER_OPTIONS}" | awk '{ print $1 }'`
+    MINER_FILE="miner"
+    MINER_OPTIONS_GO=`echo "${MINER_OPTIONS}" | awk '{ $1=""; print $0 }'`
+    MINER_PKG_NAME="custom_"`echo "${MINER_URL}" | awk -F"/" '{ print $NF }' | sed -e 's/.zip$//'`
+    MINER_DIR="/root/miner/${MINER_PKG_NAME}"
+  fi
+  # prepare temp miner folder
+  sudo rm -Rf /root/miner
+  sudo rm -Rf /var/tmp/miner/
+  sudo mkdir -p /var/tmp/miner
+  sudo ln -s /var/tmp/miner /root/miner
+  cd /var/tmp/miner
 
-  # if [[ ! -f /root/miner_org/${MINER_PKG_NAME}.tar.gz ]]; then
-  #   echo -e "${xNO}${xRED}${xBOLD}\nERROR: Miner program package not found on local disk.${xNO}"
-  #   echo -e "${xNO}${xRED}${xBOLD}\nERROR: Miner program package not found on local disk.${xNO}" >> /var/tmp/consoleSys.log
-  #   count_miner_crashes=$[count_miner_crashes+1]
-  #   sleep 30
-  #   continue;
-  # fi
+  if [[ ! -f /root/miner_org/${MINER_PKG_NAME}.tar.gz ]]; then
+    echo -e "${xNO}${xRED}${xBOLD}\nERROR: Miner program package not found on local disk.${xNO}"
+    echo -e "${xNO}${xRED}${xBOLD}\nERROR: Miner program package not found on local disk.${xNO}" >> /var/tmp/consoleSys.log
+    count_miner_crashes=$[count_miner_crashes+1]
+    sleep 30
+    continue;
+  fi
 
-  # # unpack miner archive
-  # sudo tar -xzf /root/miner_org/${MINER_PKG_NAME}.tar.gz
-  # if [[ ! -f /root/miner/${MINER_PKG_NAME}/${MINER_FILE} ]]; then
-  #   echo -e "${xNO}${xRED}${xBOLD}\nERROR: Broken miner package or miner definition. Trying to redownload in 30 seconds...${xNO}"
-  #   echo -e "${xNO}${xRED}${xBOLD}\nERROR: Broken miner package or miner definition. Trying to redownload in 30 seconds...${xNO}" >> /var/tmp/consoleSys.log
-  #   sudo rm -f /root/miner_org/${MINER_PKG_NAME}.tar.gz.md5 2>/dev/null
-  #   sudo rm -f /root/miner_org/${MINER_PKG_NAME}.tar.gz 2>/dev/null
-  #   count_miner_crashes=$[count_miner_crashes+1]
-  #   sleep 30
-  #   continue;
-  # fi
+  # unpack miner archive
+  sudo tar -xzf /root/miner_org/${MINER_PKG_NAME}.tar.gz
+  if [[ ! -f /root/miner/${MINER_PKG_NAME}/${MINER_FILE} ]]; then
+    echo -e "${xNO}${xRED}${xBOLD}\nERROR: Broken miner package or miner definition. Trying to redownload in 30 seconds...${xNO}"
+    echo -e "${xNO}${xRED}${xBOLD}\nERROR: Broken miner package or miner definition. Trying to redownload in 30 seconds...${xNO}" >> /var/tmp/consoleSys.log
+    sudo rm -f /root/miner_org/${MINER_PKG_NAME}.tar.gz.md5 2>/dev/null
+    sudo rm -f /root/miner_org/${MINER_PKG_NAME}.tar.gz 2>/dev/null
+    count_miner_crashes=$[count_miner_crashes+1]
+    sleep 30
+    continue;
+  fi
 
-  # # custom config if present
-  # if [[ `echo ${JSON} | jq -r ".minerCustConf | length"` -ge 1 ]]; then
-  #   for ikey in `echo ${JSON} | jq ".minerCustConf | keys | .[]"`; do
-  #     IONE=`echo ${JSON} | jq -r ".minerCustConf[${ikey}]"`;
-  #     INAME=`echo ${IONE} | jq -r ".name"`
-  #     if [[ -d /root/miner/${MINER_PKG_NAME} ]]; then
-  #       echo "${IONE}" | jq -r ".data" | base64 --decode > /root/miner/${MINER_PKG_NAME}/${INAME}
-  #       chmod 777 /root/miner/${MINER_PKG_NAME}/${INAME}
-  #     fi
-  #   done
-  # fi
+  # custom config if present
+  if [[ `echo ${JSON} | jq -r ".minerCustConf | length"` -ge 1 ]]; then
+    for ikey in `echo ${JSON} | jq ".minerCustConf | keys | .[]"`; do
+      IONE=`echo ${JSON} | jq -r ".minerCustConf[${ikey}]"`;
+      INAME=`echo ${IONE} | jq -r ".name"`
+      if [[ -d /root/miner/${MINER_PKG_NAME} ]]; then
+        echo "${IONE}" | jq -r ".data" | base64 --decode > /root/miner/${MINER_PKG_NAME}/${INAME}
+        chmod 777 /root/miner/${MINER_PKG_NAME}/${INAME}
+      fi
+    done
+  fi
 
-  # echo -e "${xNO}${xGREEN}${xBOLD}Running miner: ${MINER_PKG_NAME}${xNO}"
-  # echo -e "${xNO}${xGREEN}${xBOLD}Running miner: ${MINER_PKG_NAME}${xNO}" >> /var/tmp/consoleSys.log
-  # echo -e "${xNO}${xGREEN}${xBOLD}Options: ${MINER_OPTIONS_GO}${xNO}"
-  # echo -e "${xNO}${xGREEN}${xBOLD}Options: ${MINER_OPTIONS_GO}${xNO}" >> /var/tmp/consoleSys.log
+  echo -e "${xNO}${xGREEN}${xBOLD}Running miner: ${MINER_PKG_NAME}${xNO}"
+  echo -e "${xNO}${xGREEN}${xBOLD}Running miner: ${MINER_PKG_NAME}${xNO}" >> /var/tmp/consoleSys.log
+  echo -e "${xNO}${xGREEN}${xBOLD}Options: ${MINER_OPTIONS_GO}${xNO}"
+  echo -e "${xNO}${xGREEN}${xBOLD}Options: ${MINER_OPTIONS_GO}${xNO}" >> /var/tmp/consoleSys.log
  
  
-  # rm -rf /home/miner/.nv 2>/dev/null
-  # rm -rf /home/miner/.openclcache 2>/dev/null
-  # rm -rf /home/miner/.sgminer 2>/dev/null
-  # cd ${MINER_DIR}
-  # # remove miners starting flag (this will start miners API)
+  rm -rf /home/miner/.nv 2>/dev/null
+  rm -rf /home/miner/.openclcache 2>/dev/null
+  rm -rf /home/miner/.sgminer 2>/dev/null
+  cd ${MINER_DIR}
+  # remove miners starting flag (this will start miners API)
   [[ -f /var/tmp/minerStart.run ]] && sudo rm -f /var/tmp/minerStart.run 2>/dev/null
   LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:./; export LD_LIBRARY_PATH;
   minerSudo=
@@ -192,18 +192,18 @@ while true; do
   } > /dev/null 2>&1
 
 
-  # Here....miner crashed or finished work
-  # count_miner_crashes=$[count_miner_crashes+1]
-  # if [[ ${count_miner_crashes} -ge 20 ]]; then
-  #   echo -e "${xNO}${xRED}${xBOLD}Miner crashed 20 times. Rebooting rig in 30 seconds...${xNO}"
-  #   echo -e "${xNO}${xRED}${xBOLD}Miner crashed 20 times. Rebooting rig in 30 seconds...${xNO}" >> /var/tmp/consoleSys.log
-  #   sleep 30
-  #   /root/utils/force_reboot.sh
-  # fi
-  # echo -e "${xNO}${xRED}${xBOLD}Miner ended or crashed. Restarting miner in 30 seconds...${xNO}"
-  # echo -e "${xNO}${xRED}${xBOLD}Miner ended or crashed. Restarting miner in 30 seconds...${xNO}" >> /var/tmp/consoleSys.log
-  # sleep 30
+  Here....miner crashed or finished work
+  count_miner_crashes=$[count_miner_crashes+1]
+  if [[ ${count_miner_crashes} -ge 20 ]]; then
+    echo -e "${xNO}${xRED}${xBOLD}Miner crashed 20 times. Rebooting rig in 30 seconds...${xNO}"
+    echo -e "${xNO}${xRED}${xBOLD}Miner crashed 20 times. Rebooting rig in 30 seconds...${xNO}" >> /var/tmp/consoleSys.log
+    sleep 30
+    /root/utils/force_reboot.sh
+  fi
+  echo -e "${xNO}${xRED}${xBOLD}Miner ended or crashed. Restarting miner in 30 seconds...${xNO}"
+  echo -e "${xNO}${xRED}${xBOLD}Miner ended or crashed. Restarting miner in 30 seconds...${xNO}" >> /var/tmp/consoleSys.log
+  sleep 30
 
-  # tell GUI that miner restart has occurred (but not rig restart)
-  #DATA=`curl --connect-timeout 10 --max-time 20 -k -4 -s --header 'Content-Type: application/x-www-form-urlencoded' --data-urlencode email="${USER_EMAIL}" -d mac="${RIG_SERIAL_MAC}" -d osSeries="${osSeries}" -d osVersion="${osVersion}" -d ifStartup=0 ${BASEURL}/rig/autoRegisterRig`
+  tell GUI that miner restart has occurred (but not rig restart)
+  DATA=`curl --connect-timeout 10 --max-time 20 -k -4 -s --header 'Content-Type: application/x-www-form-urlencoded' --data-urlencode email="${USER_EMAIL}" -d mac="${RIG_SERIAL_MAC}" -d osSeries="${osSeries}" -d osVersion="${osVersion}" -d ifStartup=0 ${BASEURL}/rig/autoRegisterRig`
 done
