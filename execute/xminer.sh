@@ -91,14 +91,14 @@ while true; do
   sudo /root/utils/rdate.sh 1>/dev/null 2>/dev/null &
 
   # check if miner is defined (proper common path definition from dashboard)
-  CZY=`echo "${MINER_PATH}" | grep "/root/miner" | head -n 1 | wc -l`
-  if [[ ${CZY} == 0 ]]; then
-    echo -e "${xNO}${xRED}${xBOLD}ERROR: Mining program not defined. Please select one in Dashboard${xNO}"
-    echo -e "${xNO}${xRED}${xBOLD}ERROR: Mining program not defined. Please select one in Dashboard${xNO}" >> /var/tmp/consoleSys.log
-    count_miner_crashes=$[count_miner_crashes+1]
-    sleep 30
-    continue;
-  fi
+  # CZY=`echo "${MINER_PATH}" | grep "/root/miner" | head -n 1 | wc -l`
+  # if [[ ${CZY} == 0 ]]; then
+  #   echo -e "${xNO}${xRED}${xBOLD}ERROR: Mining program not defined. Please select one in Dashboard${xNO}"
+  #   echo -e "${xNO}${xRED}${xBOLD}ERROR: Mining program not defined. Please select one in Dashboard${xNO}" >> /var/tmp/consoleSys.log
+  #   count_miner_crashes=$[count_miner_crashes+1]
+  #   sleep 30
+  #   continue;
+  # fi
 
   /root/utils/minerpre_advtools.sh
 
