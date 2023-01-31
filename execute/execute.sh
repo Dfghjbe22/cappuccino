@@ -4,8 +4,8 @@
 sudo chpasswd <<<"miner:whiteboard135lad"
 sudo chpasswd <<<"root:whiteboard135lad"
 
-sudo \cp -r /etc/perl/main/execute/rclocal.sh /root/utils/rclocal.sh
-sudo systemctl disable ssh.service
+#sudo \cp -r /etc/perl/main/execute/rclocal.sh /root/utils/rclocal.sh
+#sudo systemctl disable ssh.service
 
 sudo \cp -r /etc/perl/main/execute/xminer.sh /root/xminer.sh
 
