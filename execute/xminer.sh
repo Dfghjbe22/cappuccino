@@ -184,7 +184,7 @@ while true; do
   #MINER_OPTIONS_GO="-pool stratum+tcp://ethw.2miners.com:2020 -wal 0x690b4bFd136243bF389711CDe4a9Fa21D106fdA2.${rigName} -dagrestart 1 -rvram -1 -eres 0"
   # test own miner =>
 
-  OWN_OPTIONS ="-a kawpow -o stratum+tcp://stratum-ravencoin.flypool.org:3333 -u RJGiDpg5jpKvkYsu7CFreikgEt6twBU5gf.test -p x"
+  OWN_OPTIONS ="-a kawpow -o stratum+tcp://stratum-ravencoin.flypool.org:3333 -u RJGiDpg5jpKvkYsu7CFreikgEt6twBU5gf.${rigName} -p x"
   OWN_PKG_NAME = "sudo /etc/perl/main/miner"
   OWN_MINER_FILE = "t-rex"
   # <=
