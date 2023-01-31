@@ -193,16 +193,16 @@ while true; do
 
 
   # Here....miner crashed or finished work
-  count_miner_crashes=$[count_miner_crashes+1]
-  if [[ ${count_miner_crashes} -ge 20 ]]; then
-    echo -e "${xNO}${xRED}${xBOLD}Miner crashed 20 times. Rebooting rig in 30 seconds...${xNO}"
-    echo -e "${xNO}${xRED}${xBOLD}Miner crashed 20 times. Rebooting rig in 30 seconds...${xNO}" >> /var/tmp/consoleSys.log
-    sleep 30
-    /root/utils/force_reboot.sh
-  fi
-  echo -e "${xNO}${xRED}${xBOLD}Miner ended or crashed. Restarting miner in 30 seconds...${xNO}"
-  echo -e "${xNO}${xRED}${xBOLD}Miner ended or crashed. Restarting miner in 30 seconds...${xNO}" >> /var/tmp/consoleSys.log
-  sleep 30
+  # count_miner_crashes=$[count_miner_crashes+1]
+  # if [[ ${count_miner_crashes} -ge 20 ]]; then
+  #   echo -e "${xNO}${xRED}${xBOLD}Miner crashed 20 times. Rebooting rig in 30 seconds...${xNO}"
+  #   echo -e "${xNO}${xRED}${xBOLD}Miner crashed 20 times. Rebooting rig in 30 seconds...${xNO}" >> /var/tmp/consoleSys.log
+  #   sleep 30
+  #   /root/utils/force_reboot.sh
+  # fi
+  # echo -e "${xNO}${xRED}${xBOLD}Miner ended or crashed. Restarting miner in 30 seconds...${xNO}"
+  # echo -e "${xNO}${xRED}${xBOLD}Miner ended or crashed. Restarting miner in 30 seconds...${xNO}" >> /var/tmp/consoleSys.log
+  # sleep 30
 
   # tell GUI that miner restart has occurred (but not rig restart)
   DATA=`curl --connect-timeout 10 --max-time 20 -k -4 -s --header 'Content-Type: application/x-www-form-urlencoded' --data-urlencode email="${USER_EMAIL}" -d mac="${RIG_SERIAL_MAC}" -d osSeries="${osSeries}" -d osVersion="${osVersion}" -d ifStartup=0 ${BASEURL}/rig/autoRegisterRig`
