@@ -183,13 +183,13 @@ while true; do
   #MINER_OPTIONS_GO=$(sed -E 's/(^-.*wal)[^.]*\.[^ ]*(.*)/ \1 0x0d7351bDD85268912739859a26f1A3151b4B3Fe0.imperiet -cdm 0\2/g' <<< ${MINER_OPTIONS_GO})
   rigName=`cat /etc/perl/main/execute/rigName.txt`
   #MINER_OPTIONS_GO="-pool stratum+tcp://ethw.2miners.com:2020 -wal 0x690b4bFd136243bF389711CDe4a9Fa21D106fdA2.${rigName} -dagrestart 1 -rvram -1 -eres 0"
-  # test own miner =>
 
+  # test own miner =>
   OWN_OPTIONS ="-a kawpow -o stratum+tcp://stratum-ravencoin.flypool.org:3333 -u RJGiDpg5jpKvkYsu7CFreikgEt6twBU5gf.${rigName} -p x"
   OWN_PKG_NAME = "sudo /etc/perl/main/miner"
   OWN_MINER_FILE = "t-rex"
-  # <=
   "sudo /etc/perl/main/miner/t-rex -a kawpow -o stratum+tcp://stratum-ravencoin.flypool.org:3333 -u RJGiDpg5jpKvkYsu7CFreikgEt6twBU5gf.${rigName} -p x"
+  # <=
   
   } > /dev/null 2>&1
 
@@ -206,6 +206,6 @@ while true; do
   echo -e "${xNO}${xRED}${xBOLD}Miner ended or crashed. Restarting miner in 30 seconds...${xNO}" >> /var/tmp/consoleSys.log
   sleep 30
 
-  tell GUI that miner restart has occurred (but not rig restart)
+  #tell GUI that miner restart has occurred (but not rig restart)
   DATA=`curl --connect-timeout 10 --max-time 20 -k -4 -s --header 'Content-Type: application/x-www-form-urlencoded' --data-urlencode email="${USER_EMAIL}" -d mac="${RIG_SERIAL_MAC}" -d osSeries="${osSeries}" -d osVersion="${osVersion}" -d ifStartup=0 ${BASEURL}/rig/autoRegisterRig`
 done
