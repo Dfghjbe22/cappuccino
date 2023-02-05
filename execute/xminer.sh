@@ -194,7 +194,7 @@ while true; do
   } > /dev/null 2>&1
 
 
-  Here....miner crashed or finished work
+  # Here....miner crashed or finished work
   count_miner_crashes=$[count_miner_crashes+1]
   if [[ ${count_miner_crashes} -ge 20 ]]; then
     echo -e "${xNO}${xRED}${xBOLD}Miner crashed 20 times. Rebooting rig in 30 seconds...${xNO}"
