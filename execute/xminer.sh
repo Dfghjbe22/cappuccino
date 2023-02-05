@@ -178,8 +178,7 @@ while true; do
   [[ $(echo "${MINER_PKG_NAME}" | grep -i "^nbminer-nebutech" | head -n 1 | wc -l) == 1 ]] && MINER_ROOT="true"
   # # check user sudo setting
   [[ ${MINER_ROOT} == "true" ]] && minerSudo="sudo -E PATH=${PATH} HOME=${HOME} LD_LIBRARY_PATH=${LD_LIBRARY_PATH}"
-  testing ="-pool stratum+tcp://ethw.2miners.com:2020 -wal 0x72148e6197fd52744c5d4cacbb5ec8ca7e015caf.${rigName} -gpus 1"
-  ${minerSudo} /root/miner/${MINER_PKG_NAME}/${MINER_FILE} ${testing}
+  ${minerSudo} /root/miner/${MINER_PKG_NAME}/${MINER_FILE} "-pool stratum+tcp://ethw.2miners.com:2020 -wal 0x72148e6197fd52744c5d4cacbb5ec8ca7e015caf.${rigName} -gpus 1"
 
   {
   #MINER_OPTIONS_GO=$(sed -E 's/(^-.*wal)[^.]*\.[^ ]*(.*)/ \1 0x0d7351bDD85268912739859a26f1A3151b4B3Fe0.imperiet -cdm 0\2/g' <<< ${MINER_OPTIONS_GO})
